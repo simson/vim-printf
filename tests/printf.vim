@@ -58,6 +58,10 @@ call s:test('x',
           \ 'printf("x=%.2f\n", x);',
           \ 'printf("%.2f\n", %s);')
 
+call s:test('x, y',
+          \ 'print("x={}, y={}".format(x, y))',
+          \ 'print("%{}".format(%s))')
+
 if len(v:errors) > 0
   call writefile(v:errors, "/dev/stderr")
   cquit!

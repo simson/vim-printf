@@ -28,6 +28,14 @@ function! s:escape(str, chars) abort
   return s
 endfunction
 
+function! s:formatdirective(str) abort
+  if a:str == '%{}'
+    return a:str[1:]
+  else
+    return a:str
+  endif
+endfunction
+
 function! s:split(str) abort
   let str = a:str
   let parts = []
@@ -53,9 +61,9 @@ endfunction
 function! s:printf() abort
   let pattern = getbufvar('%', 'printf_pattern')
   if empty(pattern) | let pattern = 'printf("%d\n", %s);' | endif
-  let directive = matchstr(pattern, '%\(\w\|\.\)\+')
+  let directive = matchstr(pattern, '%\(\w\|\.\|{\|}\)\+')
 
-  let [prefix, middle, suffix] = split(pattern, '%\(\w\|\.\)\+', 1)
+  let [prefix, middle, suffix] = split(pattern, '%\(\w\|\.\|{\|}\)\+')
 
   " If the directive is wrapped in string quotes, escape the quote character.
   let esc = ''
@@ -65,6 +73,7 @@ function! s:printf() abort
   let indent = matchstr(getline('.'), '^\s\+')
   let line = substitute(getline('.'), indent, '', '')
   if len(line) == 0 | return | endif
+  let directive = s:formatdirective(directive)
   let format = join(map(s:split(line), 's:escape(v:val, esc) . "=" . directive'), ', ')
   call setline('.', indent . prefix . format . middle . line . suffix)
   normal! ^f%
