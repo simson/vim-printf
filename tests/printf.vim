@@ -4,6 +4,7 @@ set nocp
 function! s:test(line, exp, ...) abort
   new
   if a:0 > 0 | let b:printf_pattern = a:1 | endif
+  if a:0 > 1 | let b:printf_delim = a:2 | endif
   call setline(1, [a:line])
   try
     Printf
@@ -61,6 +62,11 @@ call s:test('x',
 call s:test('x, y',
           \ 'print("x={}, y={}".format(x, y))',
           \ 'print("%{}".format(%s))')
+
+call s:test('x, y',
+          \ 'print("x: {}, y: {}".format(x, y))',
+          \ 'print("%{}".format(%s))',
+          \ ': ')
 
 if len(v:errors) > 0
   call writefile(v:errors, "/dev/stderr")

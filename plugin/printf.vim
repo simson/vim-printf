@@ -61,6 +61,9 @@ endfunction
 function! s:printf() abort
   let pattern = getbufvar('%', 'printf_pattern')
   if empty(pattern) | let pattern = 'printf("%d\n", %s);' | endif
+  let delim = getbufvar('%', 'printf_delim')
+  if empty(delim) | let delim = '=' | endif
+
   let directive = matchstr(pattern, '%\(\w\|\.\|{\|}\)\+')
 
   let [prefix, middle, suffix] = split(pattern, '%\(\w\|\.\|{\|}\)\+')
@@ -74,7 +77,7 @@ function! s:printf() abort
   let line = substitute(getline('.'), indent, '', '')
   if len(line) == 0 | return | endif
   let directive = s:formatdirective(directive)
-  let format = join(map(s:split(line), 's:escape(v:val, esc) . "=" . directive'), ', ')
+  let format = join(map(s:split(line), 's:escape(v:val, esc) . delim . directive'), ', ')
   call setline('.', indent . prefix . format . middle . line . suffix)
   normal! ^f%
 endfunction
