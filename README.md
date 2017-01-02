@@ -29,10 +29,11 @@ filetype.
 Below is a list of sensible patterns for different filetypes:
 
 ```vim
-autocmd FileType c    let b:printf_pattern = 'fprintf(stderr, "%d\n", %s);'
-autocmd FileType go   let b:printf_pattern = 'fmt.Printf("%v\n", %s)'
-autocmd FileType ruby let b:printf_pattern = 'printf("%p\n", %s)'
-autocmd FileType vim  let b:printf_pattern = 'echom printf("%s", %s)'
+autocmd FileType c      let b:printf_pattern = 'fprintf(stderr, "%d\n", %s);'
+autocmd FileType go     let b:printf_pattern = 'fmt.Printf("%v\n", %s)'
+autocmd FileType python let b:printf_pattern = 'print("%{}".format(%s))'
+autocmd FileType ruby   let b:printf_pattern = 'printf("%p\n", %s)'
+autocmd FileType vim    let b:printf_pattern = 'echom printf("%s", %s)'
 ```
 
 See the [documentation] for further reference on how the pattern is interpreted.
